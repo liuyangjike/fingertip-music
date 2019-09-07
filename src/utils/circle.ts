@@ -1,9 +1,9 @@
-import { randomColor } from './utils'
+import { randomColor } from './tools'
 
 const centerX = window.innerWidth / 2
 const centerY = window.innerHeight / 2
+const easing = 0.05
 
-var easing = 0.05;
 export class Arc {
   private startAngle: number
   private init: number
@@ -43,7 +43,7 @@ export class Arc {
 
   public run (){
     window.requestAnimationFrame(this.run.bind(this))
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     if (this.startAngle + 0.05 > this.init + Math.PI * 2) return
     this.draw()
     if (this.endAngle - this.startAngle + 0.05 > Math.PI * 2 ) {

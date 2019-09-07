@@ -2,7 +2,7 @@
 import React, { createRef } from 'react';
 import track from '../../assets/audio/track.json'
 import Music from '../music'
-import { getPoint, calculBlock, getClickMusic, drawFireSquare, boom, Arc } from '../../utils'
+import { getClickMusic, boom, Arc } from '../../utils'
 import './style.scss'
 
 
