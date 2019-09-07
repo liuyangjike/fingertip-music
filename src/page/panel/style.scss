@@ -1,0 +1,24 @@
+.music-canvas{
+  background: rgba(136,204,204, 1);
+  cursor: pointer;
+}
+
+
+.panel{
+  position: relative;
+}
+
+.click-block{
+  position: absolute;
+  z-index: 2;
+  animation: fade 0.2s ease-in;
+}
+
+@keyframes fade {
+  0% {
+    background: rgba(255,255, 255, 0.1)
+  }
+  100% {
+    background: rgba(255,255, 255, 0.5)
+  }
+}
