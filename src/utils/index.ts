@@ -1,5 +1,5 @@
 import { Arc } from './circle'
-import { Boom } from './boom'
+import { FireBooms } from './boom'
 import { getClickMusic } from './tools'
 
 const centerX = window.innerWidth / 2
@@ -13,55 +13,60 @@ interface posi {
   y: number
 }
 
-function randomColor(){
-  // 返回一个0-255的数值，三个随机组合为一起可定位一种rgb颜色
-  let num = 3
-  let color = []
-  while(num--){
-      color.push(Math.floor(Math.random()*254+1))
-  }
-  return color.join(', ')
-}
-
-
 class Animate {
-  private booms: Array<any>
+  private animations: Array<any>
+  private stopAnimate: boolean
 
   constructor (c: any) {
-    // 定义一个数组为爆炸的集合
-    this.booms = []
+    // 定义一个数组为动画集合
+    this.animations = []
+    this.stopAnimate = false
     // 避免每帧都进行绘制导致的过量绘制，设置阀值，到达阀值的时候再进行绘制
     canvas = c
     context = canvas.getContext('2d')
-    this.pushBoom()
   }
 
-  private pushBoom() {
-     // 实例化爆炸效果，随机条数的射线扩散
-    for (let bi = Math.random()*10 + 20; bi > 0; bi--) {
-      this.booms.push(new Boom(centerX, centerY, context))
+  public pushAnimate(type:any) {
+    // 如果还没有启动动画, 用一个定时器去启动, 为了push, 在run之前
+    if (!this.animations.length) {
+      setTimeout(() => {
+        this.run()
+      }, 100)
     }
+    if (type === 'boom') {
+      this.animations.push(new FireBooms(canvas, type))
+    } else {
+      this.animations.push(new Arc(canvas, type))
+    }
+    this.animations = this.animations.filter(item => item.name === type)
+    this.stopAnimate = false
   }
 
   public run () {
+    if (this.stopAnimate) return
     window.requestAnimationFrame(this.run.bind(this))
     context.clearRect(0, 0, canvas.width, canvas.height)
 
-    let bnum = this.booms.length
+    let bnum = this.animations.length
     while(bnum--) {
-      // 触发动画
-      this.booms[bnum].init()
-      if (this.booms[bnum].arrived) {
-        // 到达目标透明度后，把炸点给移除，释放空间
-        this.booms.splice(bnum, 1)
+      // 触发每个动画draw
+      this.animations[bnum].run()
+      console.log("TC -> run -> bnum", this.animations[bnum].isStop);
+      if (this.animations[bnum].isStop) {
+        //移除那个动画，释放空间
+        this.animations.splice(bnum, 1)
       }
+    }
+
+    if (!this.animations.length) {
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      this.stopAnimate = true
     }
   }
 }
 
-export const boom = Animate
-
 export {
   getClickMusic,
-  Arc
+  Arc,
+  Animate
 }

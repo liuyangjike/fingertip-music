@@ -2,7 +2,7 @@
 import React, { createRef } from 'react';
 import track from '../../assets/audio/track.json'
 import Music from '../music'
-import { getClickMusic, boom, Arc } from '../../utils'
+import { getClickMusic, Arc, Animate } from '../../utils'
 import './style.scss'
 
 
@@ -23,6 +23,8 @@ class Panel extends React.Component<PanelProps, PanelStates> {
   private musicRef = createRef<any>()
   private blockRef = createRef<HTMLDivElement>()
   private canvas: HTMLCanvasElement | null
+  private actions: any
+
 
   constructor(props: any) {
     super(props)
@@ -30,6 +32,7 @@ class Panel extends React.Component<PanelProps, PanelStates> {
     this.musicRef = createRef()
     this.blockRef = createRef()
     this.canvas = null
+    this.actions = null
     this.state = {
       audioUrl: track[0].path,
       blockInfo: null
@@ -38,6 +41,7 @@ class Panel extends React.Component<PanelProps, PanelStates> {
 
   componentDidMount() {
     this.canvas = this.canvasRef.current
+    this.actions = new Animate(this.canvas)
     if (this.canvas) {
       this.canvas.addEventListener('click', this.handleClick, false)
     }
@@ -85,13 +89,9 @@ class Panel extends React.Component<PanelProps, PanelStates> {
     // this.canvas && drawFireSquare(this.canvas)
     // const vm = new boom(this.canvas)
     // vm.run()
-    let animate
-    if (params.aIndex % 2 ===0) {
-      animate = new Arc(this.canvas)
-    } else {
-      animate = new boom(this.canvas)
-    }
-    animate.run()
+    console.log(1)
+    this.actions.pushAnimate(params.aIndex % 2 ===0 ? 'boom' : 'arc')
+    // animate.run()
     this.setState({
       audioUrl: track[params.aIndex-1].path,
       blockInfo: params

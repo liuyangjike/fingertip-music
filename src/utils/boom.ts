@@ -6,7 +6,15 @@ interface posi {
   y: number
 }
 
-export class Boom {
+
+let context: any
+let canvas: any
+
+
+const centerX = window.innerWidth / 2
+const centerY = window.innerHeight / 2
+
+class Boom {
   private nowLocation: posi
   private speed: number
   private acceleration: number
@@ -29,7 +37,7 @@ export class Boom {
     this.targetCount = 90  //阀值
     this.nowNum = 1  // 当前计算值
     this.alpha = 1  // 透明度
-    this.gravity = 0.8 // 重力加速度
+    this.gravity = 0.4 // 重力加速度
     this.decay = 0.015
     this.collection = new Array(4) //// 线段集合, 每次存3个，取3个帧的距离
     this.arrived = false  // 是否到达目标点
@@ -78,5 +86,43 @@ export class Boom {
   private init() {
     this.draw()
     this.update()
+  }
+}
+
+export class FireBooms {
+  private booms: Array<any>
+  private isStop: boolean
+  private name: string
+
+  constructor (c: any, name: any) {
+    // 定义一个数组为爆炸的集合
+    this.booms = []
+    this.isStop = false
+    this.name = name
+    // 避免每帧都进行绘制导致的过量绘制，设置阀值，到达阀值的时候再进行绘制
+    canvas = c
+    context = canvas.getContext('2d')
+    this.pushBoom()
+  }
+
+  private pushBoom() {
+     // 实例化爆炸效果，随机条数的射线扩散
+    for (let bi = Math.random()*10 + 30; bi > 0; bi--) {
+      this.booms.push(new Boom(centerX, centerY, context))
+    }
+  }
+
+  public run () {
+
+    let bnum = this.booms.length
+    if (!bnum) this.isStop = true  // 停止单个动画
+    while(bnum--) {
+      // 触发动画
+      this.booms[bnum].init()
+      if (this.booms[bnum].arrived) {
+        // 到达目标透明度后，把炸点给移除，释放空间
+        this.booms.splice(bnum, 1)
+      }
+    }
   }
 }

@@ -16,8 +16,12 @@ export class Arc {
   private isAdd: boolean
   private canvas: any
   private context: any
+  private isStop: boolean
+  private name: string
 
-  constructor(c: any) {
+
+
+  constructor(c: any, name: any) {
     this.startAngle = 4 * Math.PI * Math.random()
     this.init = this.startAngle
     this.endAngle = this.startAngle
@@ -27,7 +31,9 @@ export class Arc {
     this.speed = 0.1 + Math.random() * 0.1
     this.radius = Math.random() * window.innerWidth * 1/5 + 30
     this.isAdd = true
+    this.isStop = false
     this.canvas = c
+    this.name = name
     this.context = this.canvas.getContext('2d')
   }
 
@@ -42,17 +48,11 @@ export class Arc {
   }
 
   public run (){
-    window.requestAnimationFrame(this.run.bind(this))
-    // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    if (this.startAngle + 0.05 > this.init + Math.PI * 2) return
     this.draw()
-    if (this.endAngle - this.startAngle + 0.05 > Math.PI * 2 ) {
-      this.isAdd = false
+    console.log(1)
+    if (this.endAngle - this.startAngle + 0.2 > Math.PI * 2 ) {
+      this.isStop= true
     }
-    if (this.isAdd) {
-      this.endAngle += (Math.PI*2 - this.endAngle + this.init) * easing
-    } else {
-      this.startAngle += this.speed
-    }
+    this.endAngle += (Math.PI*2 - this.endAngle + this.init) * easing
   }
 }
