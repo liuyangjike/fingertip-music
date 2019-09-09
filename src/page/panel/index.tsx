@@ -14,6 +14,13 @@ interface PanelStates {
   blockInfo: any
 }
 
+
+
+interface map {
+  0: string,
+  1: string,
+  2: string
+}
 let btnOpacity = 0.02
 let direction = 1
 
@@ -86,12 +93,13 @@ class Panel extends React.Component<PanelProps, PanelStates> {
   handleClick = (e: any) => {
     const params = getClickMusic(e, e.target)
     this.hoverButton(params)
-    // this.canvas && drawFireSquare(this.canvas)
-    // const vm = new boom(this.canvas)
-    // vm.run()
-    console.log(1)
-    this.actions.pushAnimate(params.aIndex % 2 ===0 ? 'boom' : 'arc')
-    // animate.run()
+    let map = {
+      0: 'boom',
+      1: 'line',
+      2: 'arc',
+    }
+    let key = `${params.aIndex % 3}`
+    this.actions.pushAnimate(map[key])
     this.setState({
       audioUrl: track[params.aIndex-1].path,
       blockInfo: params

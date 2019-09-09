@@ -1,6 +1,9 @@
 import { Arc } from './circle'
 import { FireBooms } from './boom'
+import { Line } from './line'
+import { FireBall } from './balls'
 import { getClickMusic } from './tools'
+
 
 const centerX = window.innerWidth / 2
 const centerY = window.innerHeight / 2
@@ -33,12 +36,15 @@ class Animate {
         this.run()
       }, 100)
     }
-    if (type === 'boom') {
-      this.animations.push(new FireBooms(canvas, type))
-    } else {
-      this.animations.push(new Arc(canvas, type))
-    }
-    this.animations = this.animations.filter(item => item.name === type)
+      this.animations.push(new FireBall(canvas, type))
+
+    // if (type === 'boom') {
+    //   this.animations.push(new FireBooms(canvas, type))
+    // } else if (type === 'arc') {
+    //   this.animations.push(new Arc(canvas, type))
+    // } else {
+    //   this.animations.push(new Line(canvas, type))
+    // }
     this.stopAnimate = false
   }
 
@@ -51,7 +57,6 @@ class Animate {
     while(bnum--) {
       // 触发每个动画draw
       this.animations[bnum].run()
-      console.log("TC -> run -> bnum", this.animations[bnum].isStop);
       if (this.animations[bnum].isStop) {
         //移除那个动画，释放空间
         this.animations.splice(bnum, 1)
