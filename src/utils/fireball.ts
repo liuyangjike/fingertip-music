@@ -1,17 +1,11 @@
 import { randBetween } from './tools'
 
-const colours = ["#F73859", "#14FFEC", "#00E0FF", "#FF99FE", "#FAF15D"];
-let normal = {
-  x: window.innerWidth /2,
-  y: window.innerHeight /2
-}
 let canvas:any
-let width: number, height:number
 let ctx:any
-let balls: Array<any> = []
 
-width= window.innerWidth
-height = window.innerHeight
+const colours = ["#F73859", "#14FFEC", "#00E0FF", "#FF99FE", "#FAF15D"];
+const centerX = window.innerWidth / 2
+const centerY = window.innerHeight / 2
 
 class Ball {
   private x: number
@@ -51,7 +45,7 @@ class Ball {
   }
 }
 
-export class FireBall {
+export class BallBoom {
   private balls: Array<any>
   private isStop: boolean
 
@@ -61,7 +55,7 @@ export class FireBall {
     ctx = canvas.getContext('2d')
     this.balls = []
     this.isStop = false
-    this.pushBalls(randBetween(10, 20), normal.x, normal.y)
+    this.pushBalls(randBetween(10, 20), centerX, centerY)
   }
 
   pushBalls(count = 1, x:number, y: number) {
@@ -75,9 +69,9 @@ export class FireBall {
       let b = this.balls[i];
       if (
         b.x + b.r < 0 ||
-        b.x - b.r > width ||
+        b.x - b.r > window.innerWidth ||
         b.y + b.r < 0 ||
-        b.y - b.r > height ||
+        b.y - b.r > window.innerHeight ||
         b.r < 0
       ) {
         this.balls.splice(i, 1);
@@ -85,7 +79,7 @@ export class FireBall {
     }
   }
   
-  public run () {
+  public update () {
     for (let i = 0; i < this.balls.length; i++) {
       let b = this.balls[i];
       if (b.r < 0) continue;

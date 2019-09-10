@@ -6,10 +6,8 @@ interface posi {
   y: number
 }
 
-
 let context: any
 let canvas: any
-
 
 const centerX = window.innerWidth / 2
 const centerY = window.innerHeight / 2
@@ -89,7 +87,7 @@ class Boom {
   }
 }
 
-export class FireBooms {
+export class FireBoom {
   private booms: Array<any>
   private isStop: boolean
   private name: string
@@ -102,17 +100,17 @@ export class FireBooms {
     // 避免每帧都进行绘制导致的过量绘制，设置阀值，到达阀值的时候再进行绘制
     canvas = c
     context = canvas.getContext('2d')
-    this.pushBoom()
+    this.init()
   }
 
-  private pushBoom() {
+  private init() {
      // 实例化爆炸效果，随机条数的射线扩散
     for (let bi = Math.random()*10 + 30; bi > 0; bi--) {
       this.booms.push(new Boom(centerX, centerY, context))
     }
   }
 
-  public run () {
+  public update () {
 
     let bnum = this.booms.length
     if (!bnum) this.isStop = true  // 停止单个动画

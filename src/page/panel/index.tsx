@@ -2,7 +2,7 @@
 import React, { createRef } from 'react';
 import track from '../../assets/audio/track.json'
 import Music from '../music'
-import { getClickMusic, Arc, Animate } from '../../utils'
+import { getClickMusic, Animate } from '../../utils'
 import './style.scss'
 
 
@@ -15,29 +15,17 @@ interface PanelStates {
 }
 
 
-
-interface map {
-  0: string,
-  1: string,
-  2: string
-}
-let btnOpacity = 0.02
-let direction = 1
-
 class Panel extends React.Component<PanelProps, PanelStates> {
 
   private canvasRef = createRef<HTMLCanvasElement>()
   private musicRef = createRef<any>()
-  private blockRef = createRef<HTMLDivElement>()
   private canvas: HTMLCanvasElement | null
   private actions: any
-
 
   constructor(props: any) {
     super(props)
     this.canvasRef = createRef()
     this.musicRef = createRef()
-    this.blockRef = createRef()
     this.canvas = null
     this.actions = null
     this.state = {
@@ -60,45 +48,18 @@ class Panel extends React.Component<PanelProps, PanelStates> {
     }
   }
 
-  hoverButton = (params: any) => {
-    if (this.canvas) {
-      const context = this.canvas.getContext('2d')
-      if (context) {
-        // this.drawButton(context, params)
-      }
-    }
-  }
-
-  // drawButton = (context: any, params: any) => {
-  // const { x, y, w, h} = params  //  rgba(136,204,204, 1)
-  //   context.fillStyle = `rgba(255, 255, 255, 1)`
-  //   // btnOpacity += 0.01 * direction
-  //   // context.fillRect(x,y,w,h)
-  //   // context.fillStyle = `rgba(255, 255, 255, 0.3)`
-  //   // context.fillRect(0,0,w + w,h + h)
-
-  //   // if (btnOpacity > 0.3) {
-  //   //   direction = -1
-  //   // }
-  //   // if (btnOpacity < 0.02) {
-  //   //   context.clearRect(x - 1,y - 1,w + 2,h + 2)
-  //   //   btnOpacity = 0.02
-  //   //   direction = 1
-  //   //   return
-  //   // }
-  //   // requestAnimationFrame(this.drawButton.bind(this, context, params))
-
-  // }
-
   handleClick = (e: any) => {
     const params = getClickMusic(e, e.target)
-    this.hoverButton(params)
+    this.actions.pushAnimate('button', params)
     let map = {
-      0: 'boom',
+      0: 'fireboom',
       1: 'line',
       2: 'arc',
+      3: 'ballboom'
     }
-    let key = `${params.aIndex % 3}`
+    // let key = `${params.aIndex % 4}`
+    let key = 1 % 4
+
     this.actions.pushAnimate(map[key])
     this.setState({
       audioUrl: track[params.aIndex-1].path,
@@ -128,7 +89,6 @@ class Panel extends React.Component<PanelProps, PanelStates> {
     return (
       <div className='panel'>
        <Music audioUrl={audioUrl} ref={this.musicRef}/>
-       <div className={blockInfo && 'click-block'} style={blockStyle}></div>
        <canvas 
           ref={this.canvasRef}
           width={window.innerWidth}
