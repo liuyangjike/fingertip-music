@@ -1,10 +1,5 @@
 import { randomColor, randBetween } from './tools'
 
-const centerX = window.innerWidth / 2
-const centerY = window.innerHeight / 2
-const easing = 0.05
-
-
 interface posi {
   x: number,
   y: number
@@ -18,10 +13,8 @@ export class Line {
   private lineWidth: number
   private speed: number
   private startAngle: number
-  private angle: number
   private alpha: number
   private color: string
-  private targetCount: number
   private fadeTimer: string
   private isStop: boolean
   private name: string
@@ -37,11 +30,9 @@ export class Line {
     this.color = `${randomColor()}`
     this.lineWidth = Math.random() * 20 + 5
     this.speed = Math.random() * 10 + 10
-    this.angle = Math.random() * 2 + 0.2
     this.isStop = false
     this.startAngle = Math.PI * randBetween(60, 120) / 180
     this.firstAngle = Math.PI * randBetween(170, 190) / 180 - this.startAngle
-    this.targetCount = 0
     this.name = name
     this.fadeTimer = ''
     this.direction = Math.random() > 0.5 ? 'x' : 'y'

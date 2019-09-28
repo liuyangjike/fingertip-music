@@ -1,7 +1,11 @@
 .music-canvas{
-  background: rgba(136,204,204, 1);
+  transition: all 1s ease-in;
   cursor: pointer;
+  @media screen and (max-width: 700px) {
+    cursor: none;
+  }
 }
+
 
 
 .panel{

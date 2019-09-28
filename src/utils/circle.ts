@@ -21,7 +21,7 @@ export class Circle {
     this.init = this.startAngle
     this.endAngle = this.startAngle
     this.color = `rgba(${randomColor()}, 0.7)`
-    this.radius = Math.random() * window.innerWidth * 1/5 + 30
+    this.radius = Math.random() * window.innerWidth * 1/5 + 40
     this.isStop = false
     this.name = name
     canvas = c

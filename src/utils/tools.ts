@@ -12,17 +12,14 @@ interface areaData {
 }
 
 interface UIEvent {
-  changedTouched: Array<any>
+  changedTouches: Array<any>
 }
 
-var isTouch = ('ontouched' in document)  //检测是移动还是PC
-
-const centerX = window.innerWidth / 2
-const centerY = window.innerHeight / 2
 
 function getPoint(event: UIEvent , canvas: HTMLCanvasElement): posiObj {
   event = event || window.event   //为了兼容
-  var touchEvent = isTouch ? event.changedTouched[0]:event
+  // console.log("TCL: event", isTouch);
+  var touchEvent = event.changedTouches ? event.changedTouches[0]:event
   // pageX 和 pageY 分别是触点相对HTML文档左边沿的X坐标和触点相对HTML文档上边沿的Y坐标。只读属性。 
   //当存在滚动的偏移时，pageX包含了水平滚动的偏移，pageY包含了垂直滚动的偏移。
   var x = (touchEvent.pageX || touchEvent.clientX + document.body.scrollLeft + document.documentElement.scrollLeft)
@@ -79,4 +76,18 @@ export function randomColor(){
 
 export function randBetween(min: number, max: number) {
   return Math.floor(Math.random() * (max-min)) + min;
+}
+
+
+export function throttle(func: any, delay: number) {
+  var prev = Date.now();
+  return function() {
+      var context = this;
+      var args = arguments;
+      var now = Date.now();
+      if (now - prev >= delay) {
+          func.apply(context, args);
+          prev = Date.now();
+      }
+  }
 }

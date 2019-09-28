@@ -34,13 +34,13 @@ class Animate {
       currentAnimate = new BallBoom(canvas, type)
     } else {
       currentAnimate = new ActiveButton(canvas, type, params)
-    }
+    } 
     if (!this.animations.length) {
       setTimeout(() => {
         this.run()
       }, 100)
     }
-
+    
     // 如果还没有启动动画, 用一个定时器去启动, 为了push, 在run之前
     this.animations.push(currentAnimate)
     this.stopAnimate = false
@@ -50,6 +50,7 @@ class Animate {
     if (this.stopAnimate) return
     window.requestAnimationFrame(this.run.bind(this))
     context.clearRect(0, 0, canvas.width, canvas.height)
+
 
     let bnum = this.animations.length
     while(bnum--) {
