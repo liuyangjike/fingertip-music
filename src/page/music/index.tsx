@@ -16,11 +16,6 @@ interface MusicStates {
 class Music extends React.Component<MusicProps, MusicStates> {
   private audioRef = createRef<HTMLAudioElement>()
 
-
-  /**
-   * audio 不要用source的src, 会出现setState没有效果
-   * @private
-   */
   private onPlay = () => {
     const audioDOM = this.audioRef.current
     audioDOM && audioDOM.play()

@@ -8,7 +8,7 @@ import { getClickMusic } from './tools'
 let context: any
 let canvas: any
 class Animate {
-  private animations: Array<any>
+  public animations: Array<any>
   private stopAnimate: boolean
 
   constructor (c: any) {

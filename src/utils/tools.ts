@@ -91,3 +91,13 @@ export function throttle(func: any, delay: number) {
       }
   }
 }
+
+export function debounce(fn:any, wait:number) {
+  var timeout: any = null;
+  return function() {
+      if(timeout !== null)  {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(fn, wait);
+  }
+}
