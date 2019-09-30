@@ -1,99 +1,33 @@
 
 import React, { createRef } from 'react';
-import track from '../../assets/audio/track.json'
-import BACK_LINES from './format'
-import MikuAudio from './audio'
 import Music from '../music'
 import SwitchButton from '../../components/switch-button'
 import { randBetween, throttle, debounce } from '../../utils/tools'
+import { endBack, startBack } from '../../utils/back-music'
 import { getClickMusic, Animate } from '../../utils'
-import main from '../../assets/audio/main.json'
+import track from '../../assets/track.json'
 import './style.scss'
-
-let bcList = []
-for (let i in main) {
-  bcList.push(main[i])
-}
 
 interface PanelProps {
 }
 
 interface PanelStates {
-  audioUrl: string,
-  cilckCount: number,
-  current: number,
-  bcColor: string,
+  audioUrl: string
+  cilckCount: number
+  current: number
+  bcColor: string
   hasBackMusic: boolean
   showBtn: boolean
-
+  viewWidth: number
+  viewHeight: number
 }
 
 const mainColor = ['#88CCCC', '#594F57', '#EC5685', '#312B2D']
-interface AudioObj {
-  index: string
-  audio: any
-  buffer: any,
-}
-
-
-let backas = addBackAuido()
-
-let backEnable = true
-let backTimer:any
-let mikuAudio = new MikuAudio()
-let bindex = 0
-
-
-
-function addBackAuido () {
-  let arr = []
-  for (let i in BACK_LINES) {
-    let src = BACK_LINES[i]
-    let obj: AudioObj = {
-      index: '',
-      audio: {},
-      buffer: {}
-    }
-    obj.index = i
-    obj.audio = new Audio(src)
-    obj.buffer = base64ToArrayBuffer(src)
-    arr.push(obj)
-  }
-  return arr
-}
-
-function endBack () {
-  if (backTimer) {
-    clearInterval(backTimer)
-    backTimer = null
-  }
-}
-
-function base64ToArrayBuffer (base64: string) {
-  var binary_string = window.atob(base64.split(',')[1])
-  var len = binary_string.length
-  var bytes = new Uint8Array(len)
-  for (var i = 0; i < len; i++) {
-    bytes[i] = binary_string.charCodeAt(i)
-  }
-  return bytes.buffer
-}
-
-function startBack () {
-  if (!backEnable || backTimer) return
-  backTimer = setInterval(() => {
-    mikuAudio.play(backas[bindex], `b${bindex}`)
-    bindex++
-    if (bindex >= backas.length) bindex = 0
-  }, 200)
-}
-
 
 class Panel extends React.Component<PanelProps, PanelStates> {
 
   private canvasRef = createRef<HTMLCanvasElement>()
   private musicRef = createRef<any>()
-
   private canvas: HTMLCanvasElement | null
   private actions: any
   private timer: any
@@ -112,7 +46,9 @@ class Panel extends React.Component<PanelProps, PanelStates> {
       bcColor: mainColor[0],
       current: 0,
       hasBackMusic: false,
-      showBtn: true
+      showBtn: true,
+      viewWidth: window.innerWidth,
+      viewHeight: window.innerHeight
     }
   }
 
@@ -122,10 +58,7 @@ class Panel extends React.Component<PanelProps, PanelStates> {
     if (this.canvas) {
       this.canvas.addEventListener('click', this.handleClick, false)
       this.canvas.addEventListener('touchmove', throttle(this.handleTouch, 100), false)
-      window.addEventListener('resize', () => {
-        window.location.reload()
-      }, false)
-      
+      window.addEventListener('resize', debounce(this.handleReize, 100), false)
     }
   }
 
@@ -137,6 +70,13 @@ class Panel extends React.Component<PanelProps, PanelStates> {
 
   handleTouch = (e:any) => {
     this.handleClick(e)
+  }
+
+  handleReize = () => {
+    this.setState({
+      viewWidth: window.innerWidth,
+      viewHeight: window.innerHeight
+    })
   }
 
   switchBackMusic = () => {
@@ -197,7 +137,7 @@ class Panel extends React.Component<PanelProps, PanelStates> {
 
 
   render () {
-    const { audioUrl, bcColor, showBtn, hasBackMusic } = this.state
+    const { audioUrl, bcColor, showBtn, hasBackMusic, viewWidth, viewHeight } = this.state
     const musicColor = {backgroundColor: bcColor}
 
     return (
@@ -205,12 +145,15 @@ class Panel extends React.Component<PanelProps, PanelStates> {
        <Music audioUrl={audioUrl} ref={this.musicRef}/>
        <canvas
           ref={this.canvasRef}
-          width={window.innerWidth}
-          height={window.innerHeight}
+          width={viewWidth}
+          height={viewHeight}
           className="music-canvas"
           style={musicColor}
         ></canvas>
-        {showBtn && <div className='bc-music' onClick={this.switchBackMusic}>背景音乐: <SwitchButton hasBackMusic={hasBackMusic} /></div>}
+        {showBtn && <div className='bc-music' >
+          <div onClick={this.switchBackMusic}>背景音乐: <SwitchButton hasBackMusic={hasBackMusic} /></div>
+          <p>参考: <a className="link" href="https://aidn.jp/mikutap">aidn.jp/mikutap</a></p>
+        </div>}
       </div>
     )
   }

@@ -1,8 +1,6 @@
 
 import React, { createRef } from 'react';
-import track from '../../assets/audio/track.json'
 import './style.scss'
-
 
 interface SwitchButtonProps {
   hasBackMusic: boolean

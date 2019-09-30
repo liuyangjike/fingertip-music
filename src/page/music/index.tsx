@@ -1,6 +1,6 @@
 
 import React, { createRef } from 'react';
-import track from '../../assets/audio/track.json'
+import track from '../../assets/track.json'
 import './style.scss'
 
 

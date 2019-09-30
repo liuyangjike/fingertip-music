@@ -1,21 +1,16 @@
-.music-canvas{
-  transition: all 1s ease-in;
-  cursor: pointer;
-  @media screen and (max-width: 700px) {
-    cursor: none;
-  }
-}
-
-
-
 .panel{
   position: relative;
 }
 
-.click-block{
+.music-canvas{
+  transition: all 1s ease-in;
   position: absolute;
-  z-index: 2;
-  animation: fade 0.2s ease-in;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  @media screen and (max-width: 700px) {
+    cursor: none;
+  }
 }
 
 .bc-music{
@@ -24,6 +19,11 @@
   left: 50%;
   color: #fff;
   transform: translate3d(-60px, -12px, 0)
+}
+
+.link{
+  color: #4285f4;
+  text-decoration: none
 }
 
 @keyframes fade {
