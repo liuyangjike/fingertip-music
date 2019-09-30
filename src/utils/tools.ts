@@ -14,6 +14,7 @@ interface areaData {
 
 interface UIEvent {
   changedTouches: Array<any>
+  touches: Array<any>
 }
 
 

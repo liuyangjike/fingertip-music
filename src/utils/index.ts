@@ -20,7 +20,7 @@ class Animate {
     context = canvas.getContext('2d')
   }
 
-  public pushAnimate(type:any, params: any) {
+  public pushAnimate(type:any, params?: any) {
     let currentAnimate
 
     // 如果还没有启动动画, 用一个定时器去启动, 为了push, 在run之前
@@ -46,7 +46,7 @@ class Animate {
     this.stopAnimate = false
   }
 
-  private run () {
+  public run () {
     if (this.stopAnimate) return
     window.requestAnimationFrame(this.run.bind(this))
     context.clearRect(0, 0, canvas.width, canvas.height)

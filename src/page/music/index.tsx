@@ -1,6 +1,5 @@
 
 import React, { createRef } from 'react';
-import track from '../../assets/track.json'
 import './style.scss'
 
 
@@ -13,10 +12,11 @@ interface MusicStates {
 }
 
 
+
 class Music extends React.Component<MusicProps, MusicStates> {
   private audioRef = createRef<HTMLAudioElement>()
 
-  private onPlay = () => {
+  public onPlay = () => {
     const audioDOM = this.audioRef.current
     audioDOM && audioDOM.play()
   }
